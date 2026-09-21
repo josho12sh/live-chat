@@ -15,7 +15,12 @@ while True:
 
     while True:
 
-        message = connection.recv(1024)
+        try:
+            message = connection.recv(1024)
+            
+        except ConnectionResetError:
+            print("Client forcibly disconnected.")
+            break
 
         if not message:
             print("Client disconnected.")
