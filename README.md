@@ -8,23 +8,26 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 
 ## Current Version
 
-**v0.2.0 — Initial TCP Prototype**
+**v0.3.0 — Multi-Client TCP Prototype**
 
 ## Features
 
 - TCP client/server communication
 - Client connects to a local server
 - Client can send messages to the server
-- Server receives and displays messages
+- Server receives and broadcasts messages to connected clients
+- Multiple clients can connect simultaneously
+- Threaded client handling
+- Client can receive messages while sending messages
 - `/quit` command for the client
-- Server handles forced disconnected from the client
 - Basic client disconnect handling
+- Server handles forced disconnections from clients
 
 ## Project Structure
 
 ```text
 Live Chat Server/
-│
+
 ├── client.py
 ├── server.py
 ├── requirements.txt

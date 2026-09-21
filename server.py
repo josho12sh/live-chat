@@ -1,7 +1,14 @@
 import socket
 import threading
 
-def handle_client(connection, server):
+clients = []
+
+def broadcast(message, sender):
+    for client in clients:
+        if client != sender:
+            client.sendall(message)
+    
+def handle_client(connection, address):
     print(f"{address[0]} connected to the server.")
 
     while True:
@@ -17,8 +24,9 @@ def handle_client(connection, server):
             print("Client disconnected.")
             break
 
-        print(f"Client said: {message.decode()}")
+        broadcast(message, connection)
 
+    clients.remove(connection)
     connection.close()
 
 server = socket.socket()
@@ -31,6 +39,7 @@ print("Waiting for connection...")
 
 while True:
     connection, address = server.accept()
+    clients.append(connection)
 
     client_thread = threading.Thread(
         target=handle_client,
