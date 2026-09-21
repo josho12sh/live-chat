@@ -8,7 +8,7 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 
 ## Current Version
 
-**v0.1.0 — Initial TCP Prototype**
+**v0.1.1 — Initial TCP Prototype**
 
 ## Features
 
@@ -17,6 +17,7 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 - Client can send messages to the server
 - Server receives and displays messages
 - `/quit` command for the client
+- Server handles forced disconnected from the client
 - Basic client disconnect handling
 
 ## Project Structure
