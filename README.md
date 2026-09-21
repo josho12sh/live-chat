@@ -23,7 +23,7 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 ## Project Structure
 
 ```text
-Live Chat V1.1/
+Live Chat Server/
 │
 ├── client.py
 ├── server.py
