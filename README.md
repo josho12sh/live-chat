@@ -8,7 +8,7 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 
 ## Current Version
 
-**v0.1.1 — Initial TCP Prototype**
+**v0.2.0 — Initial TCP Prototype**
 
 ## Features
 

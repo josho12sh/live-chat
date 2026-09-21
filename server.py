@@ -1,4 +1,25 @@
 import socket
+import threading
+
+def handle_client(connection, server):
+    print(f"{address[0]} connected to the server.")
+
+    while True:
+
+        try:
+            message = connection.recv(1024)
+
+        except ConnectionResetError:
+            print("Client forcibly disconnected.")
+            break
+
+        if not message:
+            print("Client disconnected.")
+            break
+
+        print(f"Client said: {message.decode()}")
+
+    connection.close()
 
 server = socket.socket()
 
@@ -11,21 +32,10 @@ print("Waiting for connection...")
 while True:
     connection, address = server.accept()
 
-    print(f"{address[0]} connected to the server.")
+    client_thread = threading.Thread(
+        target=handle_client,
+        args=(connection, address)
+    )
 
-    while True:
-
-        try:
-            message = connection.recv(1024)
-            
-        except ConnectionResetError:
-            print("Client forcibly disconnected.")
-            break
-
-        if not message:
-            print("Client disconnected.")
-            break
-
-        print(f"Client said: {message.decode()}")
-
-    connection.close()
+    client_thread.start()
+    
