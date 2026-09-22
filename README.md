@@ -8,7 +8,7 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 
 ## Current Version
 
-**v0.3.0 — Multi-Client TCP Prototype**
+**v0.3.1 — Multi-Client TCP Prototype**
 
 ## Features
 
@@ -18,10 +18,11 @@ application using FastAPI, HTML, CSS, JavaScript, and WebSockets.
 - Server receives and broadcasts messages to connected clients
 - Multiple clients can connect simultaneously
 - Threaded client handling
-- Client can receive messages while sending messages
+- Client can receive messages while waiting for or sending messages
 - `/quit` command for the client
 - Basic client disconnect handling
 - Server handles forced disconnections from clients
+- Error handling for cases in which server is down for clients
 
 ## Project Structure
 
