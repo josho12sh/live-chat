@@ -1,5 +1,6 @@
 import socket
 import threading
+import msvcrt
 import sys
 
 client = socket.socket()
@@ -10,14 +11,30 @@ except ConnectionRefusedError:
     print("Server is down. Please try again later.")
     sys.exit()
 
+message = ""
+threading_lock = threading.Lock()
+
 def receive_messages():
+    global message
+
     while True:
         try:
-            message = client.recv(1024)
-            if not message:
+            received_message = client.recv(1024)
+
+            if not received_message:
                 print("\nServer closed connection.")
                 break
-            print(f"\nAnother user said: {message.decode()}")
+
+            with threading_lock:    
+
+                sys.stdout.write("\r\033[K")
+                sys.stdout.flush()
+
+                print(f"[User] {received_message.decode()}")
+
+                sys.stdout.write(f"[You] {message}")
+                sys.stdout.flush()
+                
         except (ConnectionResetError, OSError):
             print("\nServer shut down.")
             break
@@ -32,7 +49,22 @@ client_thread.start()
 
 while True:
     try:
-        message = input("You: ")
+        sys.stdout.write("[You] ")
+        sys.stdout.flush()
+        while True:
+            key = msvcrt.getch()
+            key = key.decode()
+
+            if key == "\r":
+                sys.stdout.write("\n")
+                break
+
+            message += key
+
+            sys.stdout.write(key)
+            sys.stdout.flush()
+
+
     except OSError:
         # This triggers if the background thread closes the socket while input() is waiting
         break
@@ -42,10 +74,9 @@ while True:
 
     try:
         client.sendall(message.encode())
+        message = ""
     except (ConnectionResetError, OSError):
         print("Server shut down.")
         break
-
-    print("Message sent!")
     
 client.close()
