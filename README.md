@@ -28,6 +28,8 @@ The long-term goal is to develop this into a web-based live chat application usi
 * Current input restored after incoming messages
 * Type hints throughout the client and server
 * Code comments and documentation
+* Backspace support for terminal input
+* Unsupported special keys are ignored
 
 ## Getting Started
 
@@ -111,3 +113,9 @@ live-chat/
 * Improved code comments and documentation
 
 This is the first release where the project provides its intended core functionality: clients can connect to a server and communicate with each other in real time.
+
+### v1.0.1 — Improved Terminal Input
+
+* Added Backspace support
+* Added handling for unsupported special keys
+* Improved terminal input behavior

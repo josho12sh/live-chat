@@ -70,6 +70,13 @@ while True:
                 sys.stdout.write("\n")
                 break
 
+            if deciphered_key == "\x08":
+                if message:
+                    message = message[:-1]
+                    sys.stdout.write("\b \b")
+                    sys.stdout.flush()
+                continue
+
             message += deciphered_key
 
             sys.stdout.write(deciphered_key)
