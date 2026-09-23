@@ -1,9 +1,12 @@
+# Imported Modules
 import socket
 import threading
 import msvcrt
 import sys
 
-client = socket.socket()
+
+# Connection and Creation of Socket
+client: socket.socket = socket.socket()
 
 try:
     client.connect(("localhost", 8000))
@@ -11,21 +14,25 @@ except ConnectionRefusedError:
     print("Server is down. Please try again later.")
     sys.exit()
 
-message = ""
-threading_lock = threading.Lock()
 
-def receive_messages():
+# Create message and lock for threading
+message: str = ""
+threading_lock: threading.Lock = threading.Lock()
+
+
+def receive_messages() -> None:
     global message
 
     while True:
         try:
-            received_message = client.recv(1024)
+            received_message: bytes = client.recv(1024)
 
             if not received_message:
                 print("\nServer closed connection.")
                 break
 
-            with threading_lock:    
+            # Lock terminal output while displaying an incoming message.
+            with threading_lock:
 
                 sys.stdout.write("\r\033[K")
                 sys.stdout.flush()
@@ -34,39 +41,42 @@ def receive_messages():
 
                 sys.stdout.write(f"[You] {message}")
                 sys.stdout.flush()
-                
+
         except (ConnectionResetError, OSError):
             print("\nServer shut down.")
             break
-            
-    # Force close the socket to break the main thread's input/send loop
-    client.close() 
 
-client_thread = threading.Thread(target=receive_messages)
-# 1. Make the thread a daemon so it dies when the main thread dies
-client_thread.daemon = True 
+    # Force close the socket to break the main thread's input/send loop.
+    client.close()
+
+
+client_thread: threading.Thread = threading.Thread(target=receive_messages)
+
+# Make the thread a daemon so it dies when the main thread dies.
+client_thread.daemon = True
 client_thread.start()
+
 
 while True:
     try:
         sys.stdout.write("[You] ")
         sys.stdout.flush()
-        while True:
-            key = msvcrt.getch()
-            key = key.decode()
 
-            if key == "\r":
+        while True:
+            key: bytes = msvcrt.getch()
+            deciphered_key: str = key.decode()
+
+            if deciphered_key == "\r":
                 sys.stdout.write("\n")
                 break
 
-            message += key
+            message += deciphered_key
 
-            sys.stdout.write(key)
+            sys.stdout.write(deciphered_key)
             sys.stdout.flush()
 
-
     except OSError:
-        # This triggers if the background thread closes the socket while input() is waiting
+        # This triggers if the background thread closes the socket while input is waiting.
         break
 
     if message == "/quit":
@@ -74,9 +84,11 @@ while True:
 
     try:
         client.sendall(message.encode())
-        message = ""
+        message: str = ""
+
     except (ConnectionResetError, OSError):
         print("Server shut down.")
         break
-    
+
+
 client.close()
